@@ -193,6 +193,7 @@ class CollectDataWindow(QWidget):
         self.MetricsConnector.pipelinestatelabel.setText(self.pipelinetext)
 
     def connect_callback(self):
+        # Connect to the base using key and license
         self.CallbackConnector.base.Connect_Callback()
 
         self.pair_button.setEnabled(True)
