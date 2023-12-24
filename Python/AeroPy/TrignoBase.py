@@ -99,6 +99,7 @@ class TrignoBase:
         configured = self.ConfigureCollectionOutput()
         if configured:
             # (Optional) To get YT data output pass 'True' to Start method
+            # self.collection_data_handler.streamYTData is a bool flag
             self.TrigBase.Start(self.collection_data_handler.streamYTData)
             self.collection_data_handler.threadManager(
                 self.start_trigger, self.stop_trigger
