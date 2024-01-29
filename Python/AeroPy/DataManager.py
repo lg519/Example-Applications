@@ -14,6 +14,22 @@ class DataKernel:
         self.allcollectiondata = [[]]
         self.channel1time = []
 
+    def computeMedianFrequency(self, data, SAMPLING_FREQUENCY=2148):
+        """
+        Compute the median frequency of the given data.
+
+        :param data: Data from which to compute the median frequency.
+        :return: The median frequency.
+        """
+        fft_values = np.fft.rfft(data)
+        power_spectrum = abs(fft_values) ** 2
+        total_power = np.sum(power_spectrum)
+        cumulative_power = np.cumsum(power_spectrum)
+        median_index = np.where(cumulative_power >= total_power / 2)[0][0]
+        fft_frequency_bins = np.fft.rfftfreq(len(data), d=1 / SAMPLING_FREQUENCY)
+        median_frequency = fft_frequency_bins[median_index]
+        return np.array(median_frequency)
+
     def processData(self, data_queue):
         """
         Processes the data from the DelsysAPI and places it in the data_queue argument.
@@ -26,6 +42,18 @@ class DataKernel:
 
         # Check if there is any data received.
         if outArr is not None:
+            # print(f"outArr: {outArr}")  # list of all channels
+            # print(
+            #     f"outArr[0]: {outArr[0]}"
+            # )  # array containing an np array of all data points in the first channel
+            # print(
+            #     f"outArr[0][0]: {outArr[0][0]}"
+            # )  # np array of all data points in the first channel
+            # print(
+            #     f"outArr[0][0][0]: {outArr[0][0][0]}"
+            # )  # first data point in the first channel
+            # print(f"len of outArr[0]: {len(outArr[0])}")
+
             # Iterate over each channel's data in the output array.
             for i in range(len(outArr)):
                 # Extend the internal allcollectiondata list for the current channel with the new data.

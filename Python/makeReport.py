@@ -103,13 +103,20 @@ def create_plotly_graphs(folder_path: str):
     with an empty row after each exercise for separation.
     """
     exercises = [file for file in os.listdir(folder_path) if file.endswith(".mat")]
-    # Allocate two rows per exercise plus one empty row for separation
+
+    # Custom sort function to sort by the numerical part of the file name
+    def sort_key(name: str) -> int:
+        return int(name.split("_")[1].split(".")[0])
+
+    # Sort exercises by numerical part of file name
+    exercises.sort(key=sort_key)
+
     rows = len(exercises) * 3
     fig = make_subplots(
         rows=rows,
         cols=3,
         subplot_titles=["EMG Data", "Processed Data", "Median Frequency"],
-        vertical_spacing=0.03,  # Adjusted spacing between rows
+        vertical_spacing=0.001,  # Adjusted spacing between rows
     )
 
     for i, exercise in enumerate(exercises, start=1):

@@ -16,6 +16,9 @@ from tkinter import filedialog
 from DataCollector.CollectionMetricsManagement import CollectionMetricsManagement
 from Plotter import GenericPlot as gp
 
+import scipy.io as sio
+import os
+
 
 class CollectDataWindow(QWidget):
     plot_enabled = False
@@ -343,6 +346,38 @@ class CollectDataWindow(QWidget):
     def stop_callback(self):
         self.CallbackConnector.base.Stop_Callback()
         self.getpipelinestate()
+
+        # Data to be saved
+        data_to_save = {
+            "Trigno_Avanti_Data": self.CallbackConnector.DataHandler.allcollectiondata
+        }
+
+        # Directory where data will be saved
+        directory = "workout_data"
+
+        # Create the directory if it doesn't exist
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        # Determine the exercise number (file count in the directory)
+        exercise_number = (
+            len(
+                [
+                    name
+                    for name in os.listdir(directory)
+                    if os.path.isfile(os.path.join(directory, name))
+                ]
+            )
+            + 1
+        )
+
+        # File path for new data file
+        file_path = os.path.join(directory, f"exercise_{exercise_number}.mat")
+
+        # Save the data in .mat format
+        sio.savemat(file_path, data_to_save)
+
+        print(f"Data saved to {file_path}")
 
     def sensorList_callback(self):
         curItem = self.SensorListBox.currentRow()
