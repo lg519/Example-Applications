@@ -4,3 +4,4 @@ env/
 *.xml
 */__pycache__/
 *.vs
+workout_data/
