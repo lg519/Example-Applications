@@ -12,6 +12,7 @@ from PySide6.QtWidgets import *
 from DataCollector.CollectDataController import *
 import tkinter as tk
 from tkinter import filedialog
+import datetime
 
 from DataCollector.CollectionMetricsManagement import CollectionMetricsManagement
 from Plotter import GenericPlot as gp
@@ -349,11 +350,11 @@ class CollectDataWindow(QWidget):
 
         # Data to be saved
         data_to_save = {
-            "Trigno_Avanti_Data": self.CallbackConnector.DataHandler.allcollectiondata
+            "emg_data": self.CallbackConnector.DataHandler.allcollectiondata[0]
         }
 
         # Directory where data will be saved
-        directory = "workout_data"
+        directory = "emg_dataset/Leonardo/right_bicep"
 
         # Create the directory if it doesn't exist
         if not os.path.exists(directory):
@@ -371,8 +372,11 @@ class CollectDataWindow(QWidget):
             + 1
         )
 
-        # File path for new data file
-        file_path = os.path.join(directory, f"exercise_{exercise_number}.mat")
+        # Get current date in YYYYMMDD format
+        current_date = datetime.date.today().strftime('%Y%m%d')
+
+        # File path for new data file with date appended
+        file_path = os.path.join(directory, f"exercise_{exercise_number}_{current_date}.mat")
 
         # Save the data in .mat format
         sio.savemat(file_path, data_to_save)
