@@ -353,8 +353,12 @@ class CollectDataWindow(QWidget):
             "emg_data": self.CallbackConnector.DataHandler.allcollectiondata[0]
         }
 
-        # Directory where data will be saved
-        directory = "emg_dataset/Leonardo/right_bicep"
+        # Subject and muscle group variables
+        subject_name = "Filippo"
+        muscle_group = "triceps"
+
+        # Directory where data will be saved, incorporating subject and muscle group
+        directory = f"emg_dataset/{subject_name}/{muscle_group}"
 
         # Create the directory if it doesn't exist
         if not os.path.exists(directory):
@@ -375,8 +379,8 @@ class CollectDataWindow(QWidget):
         # Get current date in YYYYMMDD format
         current_date = datetime.date.today().strftime('%Y%m%d')
 
-        # File path for new data file with date appended
-        file_path = os.path.join(directory, f"exercise_{exercise_number}_{current_date}.mat")
+        # Update file path format to include subject and muscle group variables
+        file_path = os.path.join(directory, f"{subject_name}_{muscle_group}_{exercise_number}_{current_date}.mat")
 
         # Save the data in .mat format
         sio.savemat(file_path, data_to_save)
